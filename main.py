@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from rich.console import Console
 import re
+import os
 
 
 HEADERS = {
@@ -358,9 +359,8 @@ def weight_calculation_round_pipe( width, thickness, length):
 	return result_weight
 
 
-def main():
+def cost_metal_structures():
 	console = Console()
-	print("Калькулятор расчета стоимости металлоконструкций")
 
 	type_metal = input('''Выберите: 1- Арматура, 2- Квадрат, 3- Круг/пруток, 4- Лента, 5- Лист/плита, 6- Труба круглая, 7- Труба профильная, 8- Уголок, 9- Швеллер\n''')
 	array_type_metal = []
@@ -375,9 +375,6 @@ def main():
 				cost_corner = item[2]
 				print("Цена за 1т: ", cost_corner)
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес детали: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '2':
 		side = input("Сторона квадрата: ")
 		length = input("Длина: ")
@@ -389,9 +386,6 @@ def main():
 				cost_corner = item[2]
 				print("Цена за 1т: ", cost_corner)
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес детали: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '3':
 		side = input("Диаметр круга: ")
 		length = input("Длина: ")
@@ -404,9 +398,6 @@ def main():
 				print("Цена за 1т: ", cost_corner)
 				break
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес детали: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '4':
 		thickness = input("Толщина ленты: ")
 		thickness = thickness.replace(',', '.')
@@ -421,9 +412,6 @@ def main():
 				print("Цена за 1т: ", cost_corner)
 				break
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес уголка: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '5':
 		thickness = input("Толщина листа: ")
 		thickness = thickness.replace(',', '.')
@@ -440,9 +428,6 @@ def main():
 				print("Цена за 1т: ", cost_corner)
 				break
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес уголка: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '6':
 		thickness = input("Толщина стенки: ")
 		thickness = thickness.replace(',', '.')
@@ -457,9 +442,6 @@ def main():
 				print("Цена за 1т: ", cost_corner)
 				break
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес уголка: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '7':
 		thickness = input("Толщина стенки: ")
 		thickness = thickness.replace(',', '.')
@@ -481,9 +463,6 @@ def main():
 				print("Цена за 1т: ", cost_corner)
 				break
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес уголка: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '8':
 		thickness = input("Толщина полки: ")
 		thickness = thickness.replace(',', '.')
@@ -498,9 +477,6 @@ def main():
 				cost_corner = item[2]
 				print("Цена за 1т: ", cost_corner)
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес уголка: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
 	elif type_metal == '9':
 		diameter = input("Номер швеллера: ")
 		length = input("Длина: ")
@@ -512,9 +488,36 @@ def main():
 				cost_corner = item[2]
 				print("Цена за 1т: ", cost_corner)
 		result = (float(weight_corner) * int(cost_corner))/1000
-		print("\n")
-		console.print("Вес детали: ", weight_corner, style="bold red")
-		console.print("Цена детали: ", result, style="bold red")
+
+	return result, weight_corner
+
+
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+
+def main():
+	console = Console()
+	print("Калькулятор расчета стоимости металлоконструкций")
+	type_detail = 0
+
+	while True:
+		result = 0
+		if type_detail == 'q':
+			break
+		type_detail = input("Подсчитать отдельную или целую металлоконструкцию? (y-да, n-нет)\nДля выхода из программы - q\n")
+
+		if type_detail == 'y':
+			col_detail = input("Введите количество делатей: ")
+			for item in range(int(col_detail)):
+				item_result, weight_corner = cost_metal_structures()
+				result += int(item_result)
+			console.print("Цена детали: ", result, style="bold red")
+		elif type_detail == 'n':
+			result, weight_corner = cost_metal_structures()
+			cls()
+			console.print("Вес детали: ", weight_corner, style="bold red")
+			console.print("Цена детали: ", result, style="bold red")
 
 
 if __name__ == '__main__':
